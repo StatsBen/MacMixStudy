@@ -1,0 +1,15 @@
+/**
+ *  This is the primary stylesheet for the Macaron Mix Study Interface
+ *  Author: Ben Clark - July, 2016
+ **/
+
+html {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: red;
+}
