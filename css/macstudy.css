@@ -11,6 +11,7 @@ html {
 body {
   margin: 0;
   padding: 0;
+  font-family:"Helvetica Nueue", sans-serif;
 }
 
 #nav-bar-container {
@@ -20,7 +21,14 @@ body {
   height: 80px;
   margin: 0;
   padding: 0;
-  background-color: yellow;
+ /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffc170+0,ffcc8e+100 */
+  background: #ffc170; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ffc170 0%, #ffcc8e 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffc170), color-stop(100%,#ffcc8e)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #ffc170 0%,#ffcc8e 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #ffc170 0%,#ffcc8e 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #ffc170 0%,#ffcc8e 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  #ffc170 0%,#ffcc8e 100%); /* W3C */
 }
 
 #page-title {
@@ -36,6 +44,5 @@ body {
   float: right;
   width: 200px;
   height: 40px;
-  margin-top: 20px;
-  background-color: green;
+  margin-top: 40px;
 }

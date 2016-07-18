@@ -31,7 +31,6 @@ var NavBar = React.createClass({
       float: "left",
       marginLeft: "15%",
       marginTop: "40px",
-      backgroundColor: "red"  // Just a test
     };
 
     var currentProgress = this.getCurrentStudyProgress();
