@@ -15,14 +15,28 @@ var Icon = React.createClass({
     return(id);
   },
 
-  _startDrag: function() {
+  _startDrag: function(e) {
     // stub
-    console.log('dragging...');
+
+    var elementToDrag = e.target.id;
+    onmousemove = this._dragging;
+    console.log('dragging...  ' + e.clientX);
   },
 
-  _endDrag: function() {
+  _endDrag: function(e) {
     // stub
+    onmousemove = null;
     console.log('done dragging!');
+  },
+
+  _dragging: function(e) {
+    //stub
+    var eToDragID = e.target.id;
+    var eToDrag = document.getElementById(eToDragID);
+    var originalXOffset = parseInt(eToDrag.style.marginLeft);
+    var originalYOffset = parseInt(eToDrag.style.marginTop);
+    console.log(eToDragID);
+    console.log(e.screenX + '-' + e.screenY);
   },
 
   _computeXOffset: function() {
