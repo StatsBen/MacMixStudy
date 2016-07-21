@@ -4,6 +4,13 @@ import ReactDOM from 'react-dom';
 var HelpButton = require('./helpbutton.jsx');
 var SubmitButton = require('./submitbutton.jsx');
 
+/**
+ * One of the higher level components containing all the elements at the
+ *  top of the screen that allows users to navigate through the study interface.
+ *
+ * Author: Ben Clark - July, 2016
+ **/
+
 var NavBar = React.createClass({
 
   propTypes: {

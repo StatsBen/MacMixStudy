@@ -4,6 +4,13 @@ import ReactDOM from 'react-dom';
 var Icon = require('./icon.jsx');
 var Bin = require('./bin.jsx');
 
+/**
+ * The component containing the actual sorting task that is the meat of this
+ *  study interface for Macaron Mix.
+ *
+ * Author: Ben Clark - July, 2016
+ **/
+
 var SortingTask = React.createClass({
 
   propTypes: {
@@ -16,6 +23,10 @@ var SortingTask = React.createClass({
     };
   },
 
+  /**
+   *  A function that generates a unique ID attribute for a bin component
+   *   based on it's given coordinates
+   **/
   _generateBinIDs: function() {
     var nBins = this.props.nBins;
   },
@@ -26,9 +37,9 @@ var SortingTask = React.createClass({
 
     return(
       <div id="sorting-task-container">
-        <Icon x={1} y={1} nIcons={25} /> 
-        <Icon x={1} y={2} nIcons={25} />
-        <Icon x={1} y={3} nIcons={25} />
+        <Icon nIcons={25} iconID={1} />
+        <Icon nIcons={25} iconID={2} />
+        <Icon nIcons={25} iconID={3} />
         <Bin x={1} y={1} nBins={4} />
       </div>
     );

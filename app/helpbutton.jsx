@@ -1,6 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+/**
+ * This component is a button that users can click on that will notify the
+ *  study facilitator that the user requires in-person assistance
+ *
+ * Author: Ben Clark - July, 2016
+ **/
+
 var HelpButton = React.createClass({
 
   _onHelpButtonClick: function() {
