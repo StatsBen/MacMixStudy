@@ -7,7 +7,7 @@ var Bin = require('./bin.jsx');
 var SortingTask = React.createClass({
 
   propTypes: {
-    nBins: React.PropsTypes.number.isRequired
+    nBins: React.PropTypes.number.isRequired
   }, // TODO Here's the problem...
 
   getDefaultProps: function() {
@@ -26,7 +26,9 @@ var SortingTask = React.createClass({
 
     return(
       <div id="sorting-task-container">
-        <Icon x={1} y={1} nIcons={25} />
+        <Icon x={1} y={1} nIcons={25} /> 
+        <Icon x={1} y={2} nIcons={25} />
+        <Icon x={1} y={3} nIcons={25} />
         <Bin x={1} y={1} nBins={4} />
       </div>
     );
