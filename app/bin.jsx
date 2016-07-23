@@ -11,9 +11,8 @@ import ReactDOM from 'react-dom';
 var Bin = React.createClass({
 
   props: {
-    x: React.PropTypes.number,
-    y: React.PropTypes.number,
-    nBins: React.PropTypes.number
+    binID: React.PropTypes.number.isRequired,
+    nBins: React.PropTypes.number.isRequired
   },
 
   /**
@@ -21,8 +20,8 @@ var Bin = React.createClass({
    *  on its x and y coordinates passed in as props.
    **/
   _getBinID: function() {
-    var id = this.props.x + '-';
-    id += this.props.y + '-bin';
+    var id = this.props.binID;
+    id += '-bin';
     return(id);
   },
 

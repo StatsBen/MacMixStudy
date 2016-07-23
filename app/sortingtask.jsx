@@ -14,33 +14,60 @@ var Bin = require('./bin.jsx');
 var SortingTask = React.createClass({
 
   propTypes: {
-    nBins: React.PropTypes.number.isRequired
-  }, // TODO Here's the problem...
+    nBins:  React.PropTypes.number.isRequired,
+    nIcons: React.PropTypes.number.isRequired
+  },
 
   getDefaultProps: function() {
     return {
-      nBins: 4
+      nBins: 4,
+      nIcons: 25
     };
   },
 
   /**
-   *  A function that generates a unique ID attribute for a bin component
-   *   based on it's given coordinates
+   *  A function that generates the desired number of Bin componenets.
    **/
-  _generateBinIDs: function() {
+  _generateBins: function() {
     var nBins = this.props.nBins;
+    var bins = new Array();
+
+    for (var i=0; i<nBins; i++) {
+      var newBinID = i.toString();
+      var newBin = (<Bin binID={newBinID} nBins={nBins} />);
+      bins.push(newBin);
+    }
+
+    return(bins);
+  },
+
+  /**
+   * generateIcons will create the desired number of Icons for the current
+   *  sorting task. These will be React componenets with IDs that produce
+   *   useful icons for the sorting task.
+   **/
+  _generateIcons: function() {
+    var nIcons = this.props.nIcons;
+    var icons = new Array();
+
+    for (var i=0; i<nIcons; i++) {
+      var newIconID = i.toString();
+      var newIcon = (<Icon iconID={newIconID} nIcons={nIcons} />);
+      icons.push(newIcon);
+    }
+
+    return(icons);
   },
 
   render: function() {
 
-    var Bins = this._generateBinIDs();
+    var Bins  = this._generateBins();
+    var Icons = this._generateIcons();
 
     return(
       <div id="sorting-task-container">
-        <Icon nIcons={25} iconID={1} />
-        <Icon nIcons={25} iconID={2} />
-        <Icon nIcons={25} iconID={3} />
-        <Bin x={1} y={1} nBins={4} />
+        {Bins}
+        {Icons}
       </div>
     );
   }

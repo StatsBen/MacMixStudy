@@ -95,7 +95,7 @@ var Icon = React.createClass({
    **/
   _getAudioSourceFromID: function() {
     //stub
-    return "fakeurl.com";
+    return "/icons/wave1.wav";
   },
 
 
@@ -121,7 +121,6 @@ var Icon = React.createClass({
 
     var playPreview = function() {
       document.getElementById(audioID).play();
-      alert('playing!'); //stub
     };
 
 
