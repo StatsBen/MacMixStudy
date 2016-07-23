@@ -34,7 +34,8 @@ var SortingTask = React.createClass({
 
     for (var i=0; i<nBins; i++) {
       var newBinID = i.toString();
-      var newBin = (<Bin binID={newBinID} nBins={nBins} />);
+      var binKey = newBinID + '-bin-react-key';
+      var newBin = (<Bin binID={newBinID} nBins={nBins} key={binKey} />);
       bins.push(newBin);
     }
 
@@ -52,7 +53,8 @@ var SortingTask = React.createClass({
 
     for (var i=0; i<nIcons; i++) {
       var newIconID = i.toString();
-      var newIcon = (<Icon iconID={newIconID} nIcons={nIcons} />);
+      var iconKey = newIconID + '-icon-react-key';
+      var newIcon = (<Icon iconID={newIconID} nIcons={nIcons} key={iconKey} />);
       icons.push(newIcon);
     }
 

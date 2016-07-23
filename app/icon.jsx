@@ -109,12 +109,16 @@ var Icon = React.createClass({
     var iconStyle = {
       position: 'absolute',
       width: '50px',
-      height: '50px',
+      height: '35px',
+      overflow: 'hidden',
       marginLeft: xOffset,
       marginTop: yOffset,
+      paddingTop: '15px',
       borderRadius: '50%',
       background: 'orange',
-    }
+      textAlign: 'center',
+      cursor: 'pointer'
+    };
 
     var audioSource = this._getAudioSourceFromID();
     var audioID = 'audio-' + iconID;
@@ -133,6 +137,7 @@ var Icon = React.createClass({
         <audio id={audioID}>
           <source src={audioSource} type="audio/wav" />
         </audio>
+        {this.props.iconID}
       </div>
     );
   }

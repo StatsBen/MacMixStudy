@@ -25,14 +25,43 @@ var Bin = React.createClass({
     return(id);
   },
 
+  /**
+   * Generate X Offset determines how the bin should be displaced so that all
+   *  the bins are evenly spread about the edges of the screen and placed
+   *   in order by ID
+   **/
+  _generateXOffset: function() {
+    //stub
+    var bID = this.props.binID;
+    var xOffset = 100;
+    return(xOffset.toString() + 'px');
+  },
+
+  /**
+   * Generate Y Offset determines the vertical displacement of the current
+   *  bin that keeps all the bins spaced out around the screen
+   **/
+  _generateYOffset: function() {
+    //stub
+    var bID = this.props.binID;
+    var yOffset = 50;
+    return(yOffset.toString() + 'px');
+  },
+
+
   render: function() {
 
     var binID = this._getBinID();
+
+    var xOffset = this._generateXOffset();
+    var yOffset = this._generateYOffset();
 
     var binStyle = {
       position: 'absolute',
       width: '25%',
       height: '300px',
+      marginLeft: xOffset,
+      marginTop:  yOffset,
       background: '#888888',
       borderRadius: '8px',
       zIndex: '-10'
