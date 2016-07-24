@@ -33,7 +33,7 @@ var Bin = React.createClass({
   _generateXOffset: function() {
     //stub
     var bID = this.props.binID;
-    var xOffset = 100;
+    var xOffset = 20;
     return(xOffset.toString() + 'px');
   },
 
@@ -44,7 +44,8 @@ var Bin = React.createClass({
   _generateYOffset: function() {
     //stub
     var bID = this.props.binID;
-    var yOffset = 50;
+    var navBarHeight = 80;
+    var yOffset = navBarHeight + 20;
     return(yOffset.toString() + 'px');
   },
 
@@ -60,9 +61,10 @@ var Bin = React.createClass({
       position: 'absolute',
       width: '25%',
       height: '300px',
-      marginLeft: xOffset,
-      marginTop:  yOffset,
+      left: xOffset,
+      top:  yOffset,
       background: '#888888',
+      border: 'thin solid #888888',
       borderRadius: '8px',
       zIndex: '-10'
     }

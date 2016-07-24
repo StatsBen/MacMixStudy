@@ -22,8 +22,9 @@ var Icon = React.createClass({
    *   of the screen without overlapping with another icon.
    **/
   _computeInitialXOffset: function() {
-    // stub
-    var offset = 0;
+    var minOffset = 500;
+    var maxOffset = 800;
+    var offset = minOffset + Math.round(Math.random() * (maxOffset-minOffset));
     return(offset.toString() + 'px');
   },
 
@@ -33,8 +34,9 @@ var Icon = React.createClass({
    *   of the screen without overlapping with another icon.
    **/
   _computeInitialYOffset: function() {
-    // stub
-    var offset = 0;
+    var minOffset = 200;
+    var maxOffset = 500;
+    var offset = minOffset + Math.round(Math.random()*(maxOffset-minOffset));
     return(offset.toString() + 'px');
   },
 
@@ -54,7 +56,7 @@ var Icon = React.createClass({
       _offsetY = parseInt(target.style.marginTop);
       _iconToDrag = target;
 
-      target.zIndex = _oldZIndex++;
+      target.style.zIndex = _oldZIndex++;
       onmousemove = this._dragging;
 
       // Try to prevent text selection
@@ -74,13 +76,14 @@ var Icon = React.createClass({
       onmousemove = null;
       document.onselectstart = null;
     }
+
+    var isInBin = this._seeIfIconIsInABin(e.target);
   },
 
   /**
    * This function makes the icon follow the cursor during a "drag" action.
    **/
   _dragging: function(e) {
-    //stub
     var newX = (_offsetX + e.clientX) - _startX;
     var newY = (_offsetY + e.clientY) - _startY;
     var newMargLeft = newX.toString() + 'px';
@@ -90,12 +93,22 @@ var Icon = React.createClass({
   },
 
   /**
+   * see If Icon Is In A Bin finds out if the most recently moved Icon appears
+   *  to be inside a bin.
+   **/
+  _seeIfIconIsInABin: function(targetIcon) {
+    //stub
+    return false;
+  },
+
+  /**
    * This function finds the url of the desired audio file for a given haptic
    *  icon based on the icon element's ID
    **/
   _getAudioSourceFromID: function() {
     //stub
-    return "/icons/wave1.wav";
+    var previewURL = '/icons/wave' + this.props.iconID + '.wav';
+    return previewURL;
   },
 
 
@@ -114,10 +127,12 @@ var Icon = React.createClass({
       marginLeft: xOffset,
       marginTop: yOffset,
       paddingTop: '15px',
-      borderRadius: '50%',
       background: 'orange',
       textAlign: 'center',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      boxShadow: "2px 2px 8px #444444",
+      border: 'thin solid #888888',
+      borderRadius: '50%'
     };
 
     var audioSource = this._getAudioSourceFromID();
@@ -137,7 +152,7 @@ var Icon = React.createClass({
         <audio id={audioID}>
           <source src={audioSource} type="audio/wav" />
         </audio>
-        {this.props.iconID}
+        {(parseInt(this.props.iconID) + 1).toString()}
       </div>
     );
   }
