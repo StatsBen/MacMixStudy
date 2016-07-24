@@ -31,25 +31,32 @@ var Bin = React.createClass({
    *   in order by ID
    **/
   _generateLeftOffset: function() {
-    //stub
     var bID = this.props.binID;
     var xOffset = 20;
     return(xOffset.toString() + 'px');
   },
-  _generateRightOffset: function() {
-    //stub
-    return null;
-  },
+
   _generateTopOffset: function() {
-    //stub
     var bID = this.props.binID;
     var navBarHeight = 80;
-    var yOffset = navBarHeight + 20;
+    var yOffset = navBarHeight + (bID * this._generateBinHeight()) + (bID * 20) + 20;
     return(yOffset.toString() + 'px');
   },
-  _generateBottomOffset: function() {
+
+  /**
+   * Generate Bin Height determines how many pixels high each bin should be
+   *  so they all stack nicely in the window.
+   **/
+  _generateBinHeight: function() {
     //stub
-    return null;
+    var navBarHeight = 80;
+    var sortingTaskHeight = window.innerHeight - navBarHeight;
+    var nBins = this.props.nBins;
+    var binGap = 20;
+    var leftovers = Math.ceil(binGap / nBins);
+    var extra = leftovers + binGap;
+    var binHeight = Math.round((sortingTaskHeight / nBins) - extra);
+    return binHeight;
   },
 
 
@@ -59,8 +66,7 @@ var Bin = React.createClass({
 
     var binStyle = {
       position: 'absolute',
-      width: '25%',
-      height: '100%',
+      width: '700px',
       background: '#888888',
       border: 'thin solid #888888',
       borderRadius: '8px',
@@ -68,16 +74,18 @@ var Bin = React.createClass({
     }
 
     var leftOffset   = this._generateLeftOffset();
-    var rightOffset  = this._generateRightOffset();
     var topOffset    = this._generateTopOffset();
-    var bottomOffset = this._generateBottomOffset();
+    var binHeight    = this._generateBinHeight();
     binStyle.left   = leftOffset;
-    binStyle.right  = rightOffset;
     binStyle.top    = topOffset;
-    binStyle.bottom = bottomOffset;
+    binStyle.height = binHeight;
+
+    var binLabel = 'bin ' + (parseInt(this.props.binID)+1).toString();
 
     return(
-      <div id={binID} style={binStyle}></div>
+      <div id={binID} style={binStyle}>
+        <i>{binLabel}</i>
+      </div>
     );
   }
 

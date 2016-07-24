@@ -22,8 +22,8 @@ var Icon = React.createClass({
    *   of the screen without overlapping with another icon.
    **/
   _computeInitialXOffset: function() {
-    var minOffset = 500;
-    var maxOffset = 800;
+    var minOffset = 700 + 50;
+    var maxOffset = window.innerWidth - 100;
     var offset = minOffset + Math.round(Math.random() * (maxOffset-minOffset));
     return(offset.toString() + 'px');
   },
@@ -34,8 +34,8 @@ var Icon = React.createClass({
    *   of the screen without overlapping with another icon.
    **/
   _computeInitialYOffset: function() {
-    var minOffset = 200;
-    var maxOffset = 500;
+    var minOffset = 100;
+    var maxOffset = window.innerHeight - 200;
     var offset = minOffset + Math.round(Math.random()*(maxOffset-minOffset));
     return(offset.toString() + 'px');
   },
