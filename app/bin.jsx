@@ -26,27 +26,30 @@ var Bin = React.createClass({
   },
 
   /**
-   * Generate X Offset determines how the bin should be displaced so that all
+   * Generate Offset determines how the bin should be displaced so that all
    *  the bins are evenly spread about the edges of the screen and placed
    *   in order by ID
    **/
-  _generateXOffset: function() {
+  _generateLeftOffset: function() {
     //stub
     var bID = this.props.binID;
     var xOffset = 20;
     return(xOffset.toString() + 'px');
   },
-
-  /**
-   * Generate Y Offset determines the vertical displacement of the current
-   *  bin that keeps all the bins spaced out around the screen
-   **/
-  _generateYOffset: function() {
+  _generateRightOffset: function() {
+    //stub
+    return null;
+  },
+  _generateTopOffset: function() {
     //stub
     var bID = this.props.binID;
     var navBarHeight = 80;
     var yOffset = navBarHeight + 20;
     return(yOffset.toString() + 'px');
+  },
+  _generateBottomOffset: function() {
+    //stub
+    return null;
   },
 
 
@@ -54,20 +57,24 @@ var Bin = React.createClass({
 
     var binID = this._getBinID();
 
-    var xOffset = this._generateXOffset();
-    var yOffset = this._generateYOffset();
-
     var binStyle = {
       position: 'absolute',
       width: '25%',
-      height: '300px',
-      left: xOffset,
-      top:  yOffset,
+      height: '100%',
       background: '#888888',
       border: 'thin solid #888888',
       borderRadius: '8px',
       zIndex: '-10'
     }
+
+    var leftOffset   = this._generateLeftOffset();
+    var rightOffset  = this._generateRightOffset();
+    var topOffset    = this._generateTopOffset();
+    var bottomOffset = this._generateBottomOffset();
+    binStyle.left   = leftOffset;
+    binStyle.right  = rightOffset;
+    binStyle.top    = topOffset;
+    binStyle.bottom = bottomOffset;
 
     return(
       <div id={binID} style={binStyle}></div>
