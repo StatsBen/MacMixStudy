@@ -9,6 +9,8 @@ import ReactDOM from 'react-dom';
  * Author: Ben Clark - July, 2016
  **/
 
+var IconStore = require('./stores/iconStore.js');
+
 var Icon = React.createClass({
 
   props: {
@@ -52,8 +54,8 @@ var Icon = React.createClass({
     if (e.button == 0) {
       _startX = e.clientX;
       _startY = e.clientY;
-      _offsetX = parseInt(target.style.marginLeft);
-      _offsetY = parseInt(target.style.marginTop);
+      _offsetX = parseInt(target.style.left);
+      _offsetY = parseInt(target.style.top);
       _iconToDrag = target;
 
       target.style.zIndex = _oldZIndex++;
@@ -94,8 +96,8 @@ var Icon = React.createClass({
     var newY = (_offsetY + e.clientY) - _startY;
     var newMargLeft = newX.toString() + 'px';
     var newMargTop  = newY.toString() + 'px';
-    _iconToDrag.style.marginLeft = newMargLeft;
-    _iconToDrag.style.marginTop  = newMargTop;
+    _iconToDrag.style.left = newMargLeft;
+    _iconToDrag.style.top  = newMargTop;
   },
 
   /**
@@ -161,8 +163,8 @@ var Icon = React.createClass({
       width: '50px',
       height: '35px',
       overflow: 'hidden',
-      marginLeft: xOffset,
-      marginTop: yOffset,
+      left: xOffset,
+      top: yOffset,
       paddingTop: '15px',
       background: 'orange',
       textAlign: 'center',

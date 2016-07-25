@@ -32,9 +32,10 @@ var Bin = React.createClass({
    **/
   _generateLeftOffset: function() {
     var bID = parseInt(this.props.binID) + 1;
-    var nBins = this.props.nBins;
+    var nBins = parseInt(this.props.nBins);
+    var cutoff = Math.ceil(nBins / 2);
 
-    if ((nBins < 7) || (bID < 7)) {
+    if ((nBins < 7) || (bID <= cutoff)) {
       var xOffset = 20;
     }
     else {
@@ -45,16 +46,17 @@ var Bin = React.createClass({
 
   _generateTopOffset: function() {
     var bID = parseInt(this.props.binID);
-    var nBins = this.props.nBins;
+    var nBins = parseInt(this.props.nBins);
+    var cutoff = Math.ceil(nBins / 2);
     var navBarHeight = 80;
 
-    if ((nBins < 7) || (bID < 6)) {
+    if ((nBins < 7) || (bID < cutoff)) {
       var yOffset = navBarHeight + (bID * this._generateBinHeight());
       yOffset += (bID * 20) + 20;
     }
     else {
-      var yOffset = navBarHeight + ((bID-6) * this._generateBinHeight());
-      yOffset += ((bID - 6) * 20) + 20;
+      var yOffset = navBarHeight + ((bID-cutoff) * this._generateBinHeight());
+      yOffset += ((bID - cutoff) * 20) + 20;
     }
     return(yOffset.toString() + 'px');
   },
@@ -66,7 +68,7 @@ var Bin = React.createClass({
   _generateBinHeight: function() {
     var navBarHeight = 80;
     var sortingTaskHeight = window.innerHeight - navBarHeight;
-    var nBins = this.props.nBins;
+    var nBins = parseInt(this.props.nBins);
     var binGap = 20;
 
     // Case 1: There's less than 7 bins and they fit in 1 column
@@ -79,8 +81,10 @@ var Bin = React.createClass({
 
     // Case 2: The bins need to overflow into 2 columns
     else {
-      var extra = Math.ceil(binGap / 6) + binGap;
-      var binHeight = Math.round((sortingTaskHeight / 6) - extra);
+      var binsPerColumn = Math.ceil(nBins / 2);
+      var leftovers = Math.ceil(binGap / binsPerColumn);
+      var extra = leftovers + binGap;
+      var binHeight = Math.round((sortingTaskHeight / binsPerColumn) - extra);
       return binHeight;
     }
   },

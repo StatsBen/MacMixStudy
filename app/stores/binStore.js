@@ -1,3 +1,3 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Flux from 'flux';
+import Relux from 'reflux';
