@@ -9,13 +9,14 @@ import ReactDOM from 'react-dom';
  * Author: Ben Clark - July, 2016
  **/
 
-var IconStore = require('./stores/iconStore.js');
+var BinStore = require('./stores/binStore.js');
 
 var Icon = React.createClass({
 
   props: {
     nIcons: React.PropTypes.number,
-    iconID: React.PropTypes.number
+    iconID: React.PropTypes.number,
+    nBins: React.PropTypes.number
   },
 
   /**
@@ -36,9 +37,11 @@ var Icon = React.createClass({
    *   of the screen without overlapping with another icon.
    **/
   _computeInitialYOffset: function() {
+    var navBarHeight = 80;
     var minOffset = 100;
     var maxOffset = window.innerHeight - 200;
     var offset = minOffset + Math.round(Math.random()*(maxOffset-minOffset));
+    offset += navBarHeight;
     return(offset.toString() + 'px');
   },
 
@@ -107,6 +110,7 @@ var Icon = React.createClass({
   _isIconInABin: function(targetIcon) {
 
     var isInBin = true;
+    var nBins = this.props.nBins;
     //stub
     return false;
   },

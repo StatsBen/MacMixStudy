@@ -8,6 +8,8 @@ import ReactDOM from 'react-dom';
  * Author: Ben Clark - July, 2016
  **/
 
+var BinStore = require('./stores/binStore.js');
+
 var Bin = React.createClass({
 
   props: {
@@ -39,7 +41,7 @@ var Bin = React.createClass({
       var xOffset = 20;
     }
     else {
-      var xOffset = 370;
+      var xOffset = 380;
     }
     return(xOffset.toString() + 'px');
   },

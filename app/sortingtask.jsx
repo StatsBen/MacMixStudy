@@ -10,6 +10,8 @@ var Bin = require('./bin.jsx');
  *
  * Author: Ben Clark - July, 2016
  **/
+var BinStore  = require('./stores/binStore.js');
+var IconStore = require('./stores/iconStore.js');
 
 var SortingTask = React.createClass({
 
@@ -20,7 +22,7 @@ var SortingTask = React.createClass({
 
   getDefaultProps: function() {
     return {
-      nBins: 6,
+      nBins: 9,
       nIcons: 25
     };
   },
@@ -49,12 +51,16 @@ var SortingTask = React.createClass({
    **/
   _generateIcons: function() {
     var nIcons = this.props.nIcons;
+    var nBins = this.props.nBins;
     var icons = new Array();
 
     for (var i=0; i<nIcons; i++) {
       var newIconID = i.toString();
       var iconKey = newIconID + '-icon-react-key';
-      var newIcon = (<Icon iconID={newIconID} nIcons={nIcons} key={iconKey} />);
+      var newIcon = (<Icon iconID={newIconID}
+                           nIcons={nIcons}
+                           key={iconKey}
+                           nBins={nBins} />);
       icons.push(newIcon);
     }
 
@@ -65,6 +71,8 @@ var SortingTask = React.createClass({
 
     var Bins  = this._generateBins();
     var Icons = this._generateIcons();
+    var nBins = parseInt(this.props.nBins);
+    BinStore.actions.setNumberOfBins(nBins);
 
     return(
       <div id="sorting-task-container">
