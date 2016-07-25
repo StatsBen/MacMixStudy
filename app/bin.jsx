@@ -31,15 +31,31 @@ var Bin = React.createClass({
    *   in order by ID
    **/
   _generateLeftOffset: function() {
-    var bID = this.props.binID;
-    var xOffset = 20;
+    var bID = parseInt(this.props.binID) + 1;
+    var nBins = this.props.nBins;
+
+    if ((nBins < 7) || (bID < 7)) {
+      var xOffset = 20;
+    }
+    else {
+      var xOffset = 370;
+    }
     return(xOffset.toString() + 'px');
   },
 
   _generateTopOffset: function() {
-    var bID = this.props.binID;
+    var bID = parseInt(this.props.binID);
+    var nBins = this.props.nBins;
     var navBarHeight = 80;
-    var yOffset = navBarHeight + (bID * this._generateBinHeight()) + (bID * 20) + 20;
+
+    if ((nBins < 7) || (bID < 6)) {
+      var yOffset = navBarHeight + (bID * this._generateBinHeight());
+      yOffset += (bID * 20) + 20;
+    }
+    else {
+      var yOffset = navBarHeight + ((bID-6) * this._generateBinHeight());
+      yOffset += ((bID - 6) * 20) + 20;
+    }
     return(yOffset.toString() + 'px');
   },
 
@@ -48,15 +64,35 @@ var Bin = React.createClass({
    *  so they all stack nicely in the window.
    **/
   _generateBinHeight: function() {
-    //stub
     var navBarHeight = 80;
     var sortingTaskHeight = window.innerHeight - navBarHeight;
     var nBins = this.props.nBins;
     var binGap = 20;
-    var leftovers = Math.ceil(binGap / nBins);
-    var extra = leftovers + binGap;
-    var binHeight = Math.round((sortingTaskHeight / nBins) - extra);
-    return binHeight;
+
+    // Case 1: There's less than 7 bins and they fit in 1 column
+    if (nBins < 7) {
+      var leftovers = Math.ceil(binGap / nBins);
+      var extra = leftovers + binGap;
+      var binHeight = Math.round((sortingTaskHeight / nBins) - extra);
+      return binHeight;
+    }
+
+    // Case 2: The bins need to overflow into 2 columns
+    else {
+      var extra = Math.ceil(binGap / 6) + binGap;
+      var binHeight = Math.round((sortingTaskHeight / 6) - extra);
+      return binHeight;
+    }
+  },
+
+  /**
+   * Generate Bin Width decides how wide the bins should be as a css property
+   *  in pixels.
+   **/
+  _generateBinWidth: function() {
+    var nBins = this.props.nBins;
+    if (nBins < 7) { return 700; }
+    else { return 340; }
   },
 
 
@@ -66,7 +102,6 @@ var Bin = React.createClass({
 
     var binStyle = {
       position: 'absolute',
-      width: '700px',
       background: '#888888',
       border: 'thin solid #888888',
       borderRadius: '8px',
@@ -76,9 +111,11 @@ var Bin = React.createClass({
     var leftOffset   = this._generateLeftOffset();
     var topOffset    = this._generateTopOffset();
     var binHeight    = this._generateBinHeight();
+    var binWidth     = this._generateBinWidth();
     binStyle.left   = leftOffset;
     binStyle.top    = topOffset;
     binStyle.height = binHeight;
+    binStyle.width  = binWidth;
 
     var binLabel = 'bin ' + (parseInt(this.props.binID)+1).toString();
 

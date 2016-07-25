@@ -77,7 +77,13 @@ var Icon = React.createClass({
       document.onselectstart = null;
     }
 
-    var isInBin = this._seeIfIconIsInABin(e.target);
+    var isInBin = this._isIconInABin(e.target);
+
+    if (isInBin) {
+      this._scootchIntoBin();
+      this._highlightBin();
+      this._checkIfTaskCanBeSubmitted();
+    }
   },
 
   /**
@@ -96,9 +102,40 @@ var Icon = React.createClass({
    * see If Icon Is In A Bin finds out if the most recently moved Icon appears
    *  to be inside a bin.
    **/
-  _seeIfIconIsInABin: function(targetIcon) {
+  _isIconInABin: function(targetIcon) {
+
+    var isInBin = true;
     //stub
     return false;
+  },
+
+  /**
+   * Scootch Into Bin tweaks the "left" and "top" style properties on
+   *  this icon so that if it is mostly but not entirely in a bin, it falls
+   *   entirely in a bin.
+   **/
+  _scootchIntoBin: function() {
+    //stub - no scootching. TODO
+    return;
+  },
+
+  /**
+   * Highligh Bin runs a quick animation to show an affirmative glow around
+   *  the bin that an icon appears to have been placed in.
+   **/
+  _highlightBin: function() {
+    //stub - no highlighting. TODO
+    return;
+  },
+
+  /**
+   * Check If Task Can Be Completed checks to see if the criteria for task
+   *  completion are satisfies, and if so, it activates the submit button,
+   *   and offers the user a notification that it's complete!
+   **/
+  _checkIfTaskCanBeSubmitted: function() {
+    // stub - no real checking. TODO
+    return;
   },
 
   /**
