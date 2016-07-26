@@ -9,9 +9,7 @@ import Reflux from 'reflux';
  **/
 
 var BinActions = Reflux.createActions(
-  [ 'setNumberOfBins',
-    'getNumberOfBins',
-    'registerBin',
+  [ 'registerBin',
     'getAllBins'   ]
 );
 
@@ -21,21 +19,9 @@ var BinStore = Reflux.createStore({
 
   init: function() {
     this._data = {
-      nBins: 5
+      nBins: 5,
+      icons: {}
     };
-  },
-
-  /**
-   * Set Number of Bins records the number of bins in the current sorting task
-   *  and keeps is viewable and constant throughout the task.
-   **/
-  setNumberOfBins: function(newNBins) {
-    BinStore._data.nBins = newNBins;
-    console.log(newNBins);
-  },
-
-  getNumberOfBins: function() {
-    return(parseInt(BinStore._data["nBins"]));
   },
 
   /**
