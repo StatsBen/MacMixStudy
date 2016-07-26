@@ -22,7 +22,7 @@ var SortingTask = React.createClass({
 
   getDefaultProps: function() {
     return {
-      nBins: 9,
+      nBins: 12,
       nIcons: 25
     };
   },

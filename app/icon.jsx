@@ -82,10 +82,9 @@ var Icon = React.createClass({
       document.onselectstart = null;
     }
 
-    var isInBin = this._isIconInABin(e.target);
+    var enclosingBin = this._findEnclosingBin(e.target);
 
-    if (isInBin) {
-      var enclosingBin = this._findEnclosingBin(e.target);
+    if (enclosingBin) {
       this._scootchIntoBin(e.target);
       this._highlightBin(enclosingBin);
       this._checkIfTaskCanBeSubmitted();
@@ -105,51 +104,46 @@ var Icon = React.createClass({
     _iconToDrag.style.top  = newMargTop;
   },
 
-  /**
-   * see If Icon Is In A Bin finds out if the most recently moved Icon appears
-   *  to be inside a bin.
-   **/
-  _isIconInABin: function(targetIcon) {
-
-    var isInBin = false;
-    var nBins = this.props.nBins;
-    var left = parseInt(targetIcon.style.left);
-
-    if (left <= 700) {isInBin = true;}
-
-    return isInBin;
-  },
 
   /**
    * Find Enclosing Bin figures out the ID of the bin that an icon appears to
    *  have been placed in and then gets that element by ID and returns it.
    **/
   _findEnclosingBin: function(targetIcon) {
-    // stub
     var x = parseInt(targetIcon.style.left) + 25;
     var y = parseInt(targetIcon.style.top) + 25;
     var nBins = this.props.nBins;
+    var navBarHeight = 80;
 
-    // Case 1: There's only 1 column of bins.
-    if (nBins < 7) {
-      var navBarHeight = 80;
+    // Case 1: The icon is too far right
+    if (x > 730) {
+      bID = null;
+    }
+    // Case 2: The icon is on the NavBar
+    else if (y <= navBarHeight) {
+      bID = -1;
+    }
+    // Case 3: There's only 1 column of bins.
+    else if (nBins < 7) {
       var binHeight = Math.round((window.innerHeight - navBarHeight) / nBins);
       var bID = Math.floor(y / binHeight) - 1;
     }
-    //Case 2: there are 2 columns
+    //Case 4: there are 2 columns
     else {
-      nBins = Math.ceil(nBins / 2);
-      var navBarHeight = 80;
-      var binHeight = Math.round((window.innerHeight - navBarHeight) / nBins);
+      var newN = Math.ceil(nBins / 2);
+      var binHeight = Math.round((window.innerHeight - navBarHeight) / newN);
       if (x < 370) { // Left Column
         bID = Math.floor(y / binHeight) - 1;
       } else {
-        bID = (Math.floor(y / binHeight) + nBins) - 1;
+        bID = (Math.floor(y / binHeight) + newN) - 1;
       }
     }
 
-    var actualBinID = bID.toString() + '-bin';
-    var bin = document.getElementById(actualBinID);
+    console.log(bID);
+    if (bID !== null) {
+      var actualBinID = bID.toString() + '-bin';
+      var bin = document.getElementById(actualBinID);
+    }
     return bin;
   },
 
@@ -169,19 +163,16 @@ var Icon = React.createClass({
    **/
   _highlightBin: function(targetBin) {
 
-    console.log(targetBin);
     var opacity = 1;
     var shadowVal;
 
     var binGlow = function() {
-      if (opacity < 0) { console.log('done'); clearInterval(animID); }
+      if (opacity < 0) { clearInterval(animID); }
       else {
         shadowVal = '0px 0px 25px rgba(265, 165, 0, '
         shadowVal += opacity.toString() + ')';
-        console.log(shadowVal);
         targetBin.style.boxShadow = shadowVal;
         opacity = opacity - 0.01;
-        console.log('animating');
       }
     }
 
