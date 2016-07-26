@@ -85,10 +85,12 @@ var Icon = React.createClass({
     var isInBin = this._isIconInABin(e.target);
 
     if (isInBin) {
-      this._scootchIntoBin();
-      this._highlightBin();
+      var enclosingBin = this._findEnclosingBin(e.target);
+      this._scootchIntoBin(e.target);
+      this._highlightBin(enclosingBin);
       this._checkIfTaskCanBeSubmitted();
     }
+
   },
 
   /**
@@ -109,10 +111,46 @@ var Icon = React.createClass({
    **/
   _isIconInABin: function(targetIcon) {
 
-    var isInBin = true;
+    var isInBin = false;
     var nBins = this.props.nBins;
-    //stub
-    return false;
+    var left = parseInt(targetIcon.style.left);
+
+    if (left <= 700) {isInBin = true;}
+
+    return isInBin;
+  },
+
+  /**
+   * Find Enclosing Bin figures out the ID of the bin that an icon appears to
+   *  have been placed in and then gets that element by ID and returns it.
+   **/
+  _findEnclosingBin: function(targetIcon) {
+    // stub
+    var x = parseInt(targetIcon.style.left) + 25;
+    var y = parseInt(targetIcon.style.top) + 25;
+    var nBins = this.props.nBins;
+
+    // Case 1: There's only 1 column of bins.
+    if (nBins < 7) {
+      var navBarHeight = 80;
+      var binHeight = Math.round((window.innerHeight - navBarHeight) / nBins);
+      var bID = Math.floor(y / binHeight) - 1;
+    }
+    //Case 2: there are 2 columns
+    else {
+      nBins = Math.ceil(nBins / 2);
+      var navBarHeight = 80;
+      var binHeight = Math.round((window.innerHeight - navBarHeight) / nBins);
+      if (x < 370) { // Left Column
+        bID = Math.floor(y / binHeight) - 1;
+      } else {
+        bID = (Math.floor(y / binHeight) + nBins) - 1;
+      }
+    }
+
+    var actualBinID = bID.toString() + '-bin';
+    var bin = document.getElementById(actualBinID);
+    return bin;
   },
 
   /**
@@ -120,7 +158,7 @@ var Icon = React.createClass({
    *  this icon so that if it is mostly but not entirely in a bin, it falls
    *   entirely in a bin.
    **/
-  _scootchIntoBin: function() {
+  _scootchIntoBin: function(targetIcon) {
     //stub - no scootching. TODO
     return;
   },
@@ -129,9 +167,25 @@ var Icon = React.createClass({
    * Highligh Bin runs a quick animation to show an affirmative glow around
    *  the bin that an icon appears to have been placed in.
    **/
-  _highlightBin: function() {
-    //stub - no highlighting. TODO
-    return;
+  _highlightBin: function(targetBin) {
+
+    console.log(targetBin);
+    var opacity = 1;
+    var shadowVal;
+
+    var binGlow = function() {
+      if (opacity < 0) { console.log('done'); clearInterval(animID); }
+      else {
+        shadowVal = '0px 0px 25px rgba(265, 165, 0, '
+        shadowVal += opacity.toString() + ')';
+        console.log(shadowVal);
+        targetBin.style.boxShadow = shadowVal;
+        opacity = opacity - 0.01;
+        console.log('animating');
+      }
+    }
+
+    var animID = setInterval(binGlow, 10);
   },
 
   /**
