@@ -85,7 +85,7 @@ var Icon = React.createClass({
     var enclosingBin = this._findEnclosingBin(e.target);
 
     if (enclosingBin) {
-      this._scootchIntoBin(e.target);
+      this._scootchIntoBin(e.target, enclosingBin);
       this._highlightBin(enclosingBin);
       this._checkIfTaskCanBeSubmitted();
     }
@@ -110,13 +110,13 @@ var Icon = React.createClass({
    *  have been placed in and then gets that element by ID and returns it.
    **/
   _findEnclosingBin: function(targetIcon) {
-    var x = parseInt(targetIcon.style.left) + 25;
-    var y = parseInt(targetIcon.style.top) + 25;
-    var nBins = this.props.nBins;
     var navBarHeight = 80;
+    var nBins = this.props.nBins;
+    var x = parseInt(targetIcon.style.left) + 25;
+    var y = parseInt(targetIcon.style.top) + 25 + navBarHeight;
 
     // Case 1: The icon is too far right
-    if (x > 730) {
+    if (x > 750) {
       bID = null;
     }
     // Case 2: The icon is on the NavBar
@@ -134,12 +134,11 @@ var Icon = React.createClass({
       var binHeight = Math.round((window.innerHeight - navBarHeight) / newN);
       if (x < 370) { // Left Column
         bID = Math.floor(y / binHeight) - 1;
-      } else {
+      } else {       // Right Column
         bID = (Math.floor(y / binHeight) + newN) - 1;
       }
     }
 
-    console.log(bID);
     if (bID !== null) {
       var actualBinID = bID.toString() + '-bin';
       var bin = document.getElementById(actualBinID);
@@ -152,9 +151,50 @@ var Icon = React.createClass({
    *  this icon so that if it is mostly but not entirely in a bin, it falls
    *   entirely in a bin.
    **/
-  _scootchIntoBin: function(targetIcon) {
-    //stub - no scootching. TODO
-    return;
+  _scootchIntoBin: function(targetIcon, targetBin) {
+
+    var nBins = this.props.nBins;
+    var iconWidth  = 50;
+    var iconHeight = 50;
+    var binWidth  = (nBins < 7) ? 700 : 340;
+
+    if (nBins < 7) {
+      var binHeight = Math.round((window.innerHeight - 80) / nBins) - 25;
+    } else {
+      var binHeight = Math.round((window.innerHeight - 80) / Math.ceil(nBins / 2)) - 25;
+    }
+
+    var iLeft   = parseInt(targetIcon.style.left);
+    var iRight  = parseInt(targetIcon.style.left) + iconWidth;
+    var iTop    = parseInt(targetIcon.style.top);
+    var iBottom = parseInt(targetIcon.style.top) + iconWidth;
+
+    var bLeft   = parseInt(targetBin.style.left);
+    var bRight  = parseInt(targetBin.style.left) + binWidth;
+    var bTop    = parseInt(targetBin.style.top);
+    var bBottom = parseInt(targetBin.style.top) + binHeight;
+
+    //Case 1: icon is left of the bin
+    if (iLeft < bLeft) {
+      var newLeft = bLeft.toString() + 'px';
+      targetIcon.style.left = newLeft;
+    }
+    //Case 2: icon is right of the bin
+    if (iRight > bRight) {
+      var newLeft = (bRight - iconWidth).toString() + 'px';
+      targetIcon.style.left = newLeft;
+    }
+    //Case 3: icon is above the bin
+    if (iTop < bTop) {
+      var newTop = bTop.toString() + 'px';
+      targetIcon.style.top = newTop;
+    }
+    //Case 4: icon is below the bin
+    if (iBottom > bBottom) {
+      var newTop = (bBottom.toString() - iconHeight).toString() + 'px';
+      targetIcon.style.top = newTop;
+    }
+
   },
 
   /**
