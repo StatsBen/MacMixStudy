@@ -16,14 +16,17 @@ var IconStore = require('./stores/iconStore.js');
 var SortingTask = React.createClass({
 
   propTypes: {
+    taskID: React.PropTypes.number.isRequired,
     nBins:  React.PropTypes.number.isRequired,
-    nIcons: React.PropTypes.number.isRequired
+    nIcons: React.PropTypes.number.isRequired,
+    isActive: React.PropTypes.bool.isRequired
   },
 
   getDefaultProps: function() {
+
     return {
-      nBins: 7,
-      nIcons: 25
+      nIcons: 25,
+      nBins: 4   //default
     };
   },
 
@@ -69,17 +72,35 @@ var SortingTask = React.createClass({
 
   render: function() {
 
+    // decide how many bins there should be...
+    var nBins = 1; //default
+    switch(this.props.taskID) {
+      case 1: nBins = 12; break;
+      case 2: nBins = 2; break;
+      case 3: nBins = 4; break;
+      case 4: nBins = 7; break;
+      case 5: nBins = 9; break;
+      case 6: nBins = 12; break;
+    }
+    //this.props.nBins = nBins;
+
     var Bins  = this._generateBins();
     var Icons = this._generateIcons();
     var nBins = parseInt(this.props.nBins);
-    BinStore.actions.setNumberOfBins(nBins);
+    var taskID = 'sorting-task-container-' + this.props.taskID.toString();
 
-    return(
-      <div id="sorting-task-container">
-        {Bins}
-        {Icons}
-      </div>
-    );
+    if (this.props.isActive) {
+      return(
+        <div id={taskID} className="sorting-task-container">
+          {Bins}
+          {Icons}
+        </div>
+      );
+    }
+
+    else {
+      return (<div id={taskID}></div>);
+    }
   }
 
 });

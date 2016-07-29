@@ -113,29 +113,30 @@ var Icon = React.createClass({
     var navBarHeight = 80;
     var nBins = this.props.nBins;
     var x = parseInt(targetIcon.style.left) + 25;
-    var y = parseInt(targetIcon.style.top) + 25 + navBarHeight;
+    var y = (parseInt(targetIcon.style.top) + 25) - navBarHeight;
 
     // Case 1: The icon is too far right
     if (x > 750) {
       bID = null;
     }
     // Case 2: The icon is on the NavBar
-    else if (y <= navBarHeight) {
+    else if (y < 0) {
       bID = -1;
     }
     // Case 3: There's only 1 column of bins.
     else if (nBins < 7) {
       var binHeight = Math.round((window.innerHeight - navBarHeight) / nBins);
-      var bID = Math.floor(y / binHeight) - 1;
+      var bID = Math.floor(y / binHeight);
     }
     //Case 4: there are 2 columns
     else {
       var newN = Math.ceil(nBins / 2);
+      console.log(newN);
       var binHeight = Math.round((window.innerHeight - navBarHeight) / newN);
       if (x < 370) { // Left Column
-        bID = Math.floor(y / binHeight) - 1;
+        bID = Math.floor(y / binHeight);
       } else {       // Right Column
-        bID = (Math.floor(y / binHeight) + newN) - 1;
+        bID = (Math.floor(y / binHeight) + newN);
       }
     }
 

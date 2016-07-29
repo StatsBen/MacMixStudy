@@ -15,7 +15,11 @@ var StudyInterface = React.createClass({
     return(
       <div id="app">
         <NavBar />
-        <SortingTask />
+        <SortingTask taskID={1} isActive={true} nBins={11} />
+        <SortingTask taskID={2} isActive={false} nBins={2} />
+        <SortingTask taskID={3} isActive={false} nBins={4} />
+        <SortingTask taskID={4} isActive={false} nBins={7} />
+        <SortingTask taskID={5} isActive={false} nBins={9} />
       </div>
     );
   }
