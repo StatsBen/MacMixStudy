@@ -9,7 +9,7 @@ import ReactDOM from 'react-dom';
  * Author: Ben Clark - July, 2016
  **/
 
-var BinStore = require('./stores/binStore.js');
+var SortingTaskStore = require('./stores/sortingTaskStore.js');
 
 var Icon = React.createClass({
 

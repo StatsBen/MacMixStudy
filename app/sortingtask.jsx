@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 var Icon = require('./icon.jsx');
 var Bin = require('./bin.jsx');
 
+var sortingTaskStore = require('./stores/sortingTaskStore.js');
+
 /**
  * The component containing the actual sorting task that is the meat of this
  *  study interface for Macaron Mix.
