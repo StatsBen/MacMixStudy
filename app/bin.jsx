@@ -106,6 +106,8 @@ var Bin = React.createClass({
 
     var binID = this._getBinID();
 
+    SortingTaskStore.actions.registerBin(binID);
+
     var binStyle = {
       position: 'absolute',
       background: '#888888',

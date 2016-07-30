@@ -88,6 +88,11 @@ var Icon = React.createClass({
       this._scootchIntoBin(e.target, enclosingBin);
       this._highlightBin(enclosingBin);
       this._checkIfTaskCanBeSubmitted();
+      SortingTaskStore.actions.sortIcon(this.props.iconID, enclosingBin.id);
+    }
+
+    else {
+      SortingTaskStore.actions.unsortIcon(this.props.iconID);
     }
 
   },
@@ -266,6 +271,8 @@ var Icon = React.createClass({
 
     var audioSource = this._getAudioSourceFromID();
     var audioID = 'audio-' + iconID;
+
+    SortingTaskStore.actions.registerIcon(iconID);
 
     var playPreview = function() {
       document.getElementById(audioID).play();
