@@ -9,6 +9,8 @@ import ReactDOM from 'react-dom';
  * Author: Ben Clark - July, 2016
  **/
 
+var SortingTaskStore = require('./stores/sortingTaskStore.js');
+
 var SubmitButton = React.createClass({
 
   propTypes: {
@@ -16,14 +18,12 @@ var SubmitButton = React.createClass({
   },
 
   _handleSubmitClick: function() {
-    //stub
-    alert('you clicked the submit button!');
+    SortingTaskStore.actions.submitTask();
   },
 
   render: function() {
     return(
-      <button onClick={this._handleSubmitClick}
-              disabled={!this.props.taskComplete}>Submit Task</button>
+      <button onClick={this._handleSubmitClick}>Submit Task</button>
     );
   }
 

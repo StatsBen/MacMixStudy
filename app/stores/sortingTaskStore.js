@@ -9,6 +9,8 @@ import Reflux from 'reflux';
  *   Author: Ben Clark - July 2016
  **/
 
+var SubmitButton = require('./../submitbutton.jsx');
+
 var SortingTaskActions = Reflux.createActions(
 
   [
@@ -19,7 +21,7 @@ var SortingTaskActions = Reflux.createActions(
     'sortIcon',
     'unsortIcon',
     'seeIfTaskIsComplete',
-    'completeTask',
+    'submitTask',
     'saveTask'
   ]
 
@@ -34,7 +36,7 @@ var SortingTaskStore = Reflux.createStore({
   init: function() {
 
     this._nBins;
-    this._nIcons;
+    this._nIcons = 25;
 
     // Here's the list of all icons and bins.
     this._icons = [];
@@ -147,8 +149,9 @@ var SortingTaskStore = Reflux.createStore({
       // demote the previous bin if need be...
       var fullBinIndex = this._findBinByID(prevBinID, this._filledBins);
       var halfBinIndex = this._findBinByID(prevBinID, this._halfFilledBins);
+      console.log(prevBinID);
 
-      if ((fullBinIndex >= 0) && (this._binRecords[binID].length < 3)) {
+      if ((fullBinIndex >= 0) && (this._binRecords[prevBinID].length < 2)) {
         this._filledBins.splice(fullBinIndex, 1);
         this._halfFilledBins.push({binID: prevBinID});
       } else if (halfBinIndex >= 0) {
@@ -224,7 +227,7 @@ var SortingTaskStore = Reflux.createStore({
       console.log('FBInd: ' + fullBinIndex);
       console.log('HBInd: ' + halfBinIndex);
 
-      if ((fullBinIndex >= 0) && (this._binRecords[binID].length < 3)) {
+      if ((fullBinIndex >= 0) && (this._binRecords[binID].length < 2)) {
         this._filledBins.splice(fullBinIndex, 1);
         this._halfFilledBins.push({binID: binID});
       } else if (halfBinIndex >= 0) {
@@ -239,28 +242,30 @@ var SortingTaskStore = Reflux.createStore({
   },
 
   /**
-   * See If Task Is Complete looks at the list of filled and unfilled bins
-   *  in combination with the task ID and determines if the task is complete!
-   *   returns a boolean...
-   **/
-  seeIfTaskIsComplete: function() {
-
-    var allIconsSorted = (this._unsortedIcons.length == 0);
-    allIconsSorted = allIconsSorted && (this._sortedIcons.length == this._nIcons);
-    var allBinsFilled  = (this._unfilledBins.length == 0);
-    allBinsFilled = allBinsFilled && (this._filledBins.length == this._nBins);
-
-    return false;
-  },
-
-  /**
    * Complete task will take all the data in this store and drop it into
-   *  some sort of CSV-esque file for analysis when the task is complete.
+   *  some sort of CSV-esque file for analysis if the task is complete,
+   *   and produce an alert otherwise.
    **/
-  completeTask: function() {
-    //stub  TODO
-    console.log('task complete...');
-    return;
+  submitTask: function() {
+
+    var taskComplete = this._seeIfTaskIsComplete();
+
+    if (taskComplete) {
+      // puke all the data out to the console!
+      alert('task complete! Please wait for your study facilitator to record this data and prepare the next task for you.');
+    } else {
+
+      // Icons remain unsorted
+      if (this._unsortedIcons.length != 0) {
+        alert('there appear to be unsorted icons that need to be placed into bins before the task may be submitted.');
+      } // A bin isn't full...
+      else if ((this._halfFilledBins.length != 0) || (this._unfilledBins.length != 0)) {
+        alert('it looks like one of the available bins has less than 2 icons in it. Every bin must have at least 2 icons for the task to be submitted.');
+      } // Unidentified error... :(
+      else {
+        alert('an unidentified error has occurred. Please contact your study facilitator for assistance.');
+      }
+    }
   },
 
   /**
@@ -272,6 +277,21 @@ var SortingTaskStore = Reflux.createStore({
     //stub  TODO
     console.log('task saved!');
     return;
+  },
+
+  /**
+   * See If Task Is Complete looks at the list of filled and unfilled bins
+   *  in combination with the task ID and determines if the task is complete!
+   *   returns a boolean...
+   **/
+  _seeIfTaskIsComplete: function() {
+
+    var allIconsSorted = (this._unsortedIcons.length == 0);
+    allIconsSorted = allIconsSorted && (this._sortedIcons.length == this._nIcons);
+    var allBinsFilled  = (this._unfilledBins.length == 0);
+    allBinsFilled = allBinsFilled && (this._filledBins.length == this._nBins);
+
+    return(allIconsSorted && allBinsFilled);
   },
 
 
