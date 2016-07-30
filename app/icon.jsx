@@ -136,7 +136,6 @@ var Icon = React.createClass({
     //Case 4: there are 2 columns
     else {
       var newN = Math.ceil(nBins / 2);
-      console.log(newN);
       var binHeight = Math.round((window.innerHeight - navBarHeight) / newN);
       if (x < 370) { // Left Column
         bID = Math.floor(y / binHeight);
