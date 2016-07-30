@@ -12,10 +12,13 @@ import Reflux from 'reflux';
 var SortingTaskActions = Reflux.createActions(
 
   [
+    'setNIcons',
+    'setNBins',
     'registerBin',
     'registerIcon',
     'sortIcon',
     'unsortIcon',
+    'seeIfTaskIsComplete',
     'completeTask',
     'saveTask'
   ]
@@ -29,6 +32,10 @@ var SortingTaskStore = Reflux.createStore({
 
 
   init: function() {
+
+    this._nBins;
+    this._nIcons;
+
     // Here's the list of all icons and bins.
     this._icons = [];
     this._bins = [];
@@ -48,6 +55,16 @@ var SortingTaskStore = Reflux.createStore({
     this._filledBins = [];
   },
 
+  /**  Set nIcons just sets the value of nIcons.  **/
+  setNIcons: function(nIcons) {
+    this._nIcons = nIcons;
+  },
+
+  /** Set nBins just sets the value of nBins.   **/
+  setNBins: function(nBins) {
+    this._nBins = nBins;
+  },
+
   /**
    * Register Bin is called when a bin renders, and adds that bin to the list
    *  of all the bins kept in this store.
@@ -65,9 +82,9 @@ var SortingTaskStore = Reflux.createStore({
    * Register Icon adds an Icon component to the list of all icons kept in
    *  this store; it's called when an Icon component is rendered.
    **/
-  registerIcon: function(iconID, audioID) {
+  registerIcon: function(iconID) {
 
-    var iconItem = {iconID: parseInt(iconID), audioID: audioID};
+    var iconItem = {iconID: parseInt(iconID)};
     this._icons.push(iconItem);
     this._unsortedIcons.push(iconItem);
 
@@ -85,8 +102,11 @@ var SortingTaskStore = Reflux.createStore({
 
     var iconID = parseInt(iID);
     var binID = parseInt(bID);
-
     var iconIndex = this._findIconByID(iconID, this._sortedIcons);
+
+    // Remove the icon from the list of unsorted Icons
+    var unsortedInd = this._findIconByID(iconID, this._unsortedIcons);
+    if (unsortedInd >= 0) { this._unsortedIcons.splice(unsortedInd, 1); }
 
     if (iconIndex >= 0) {
       // first find the relationship involving that icon and break it
@@ -128,7 +148,7 @@ var SortingTaskStore = Reflux.createStore({
       var fullBinIndex = this._findBinByID(prevBinID, this._filledBins);
       var halfBinIndex = this._findBinByID(prevBinID, this._halfFilledBins);
 
-      if ((fullBinIndex >= 0) && (this._filledBins.length < 3)) {
+      if ((fullBinIndex >= 0) && (this._binRecords[binID].length < 3)) {
         this._filledBins.splice(fullBinIndex, 1);
         this._halfFilledBins.push({binID: prevBinID});
       } else if (halfBinIndex >= 0) {
@@ -176,7 +196,10 @@ var SortingTaskStore = Reflux.createStore({
    * Unsort Icon removes an icon from a bin if a user takes an icon out
    *  of a bin and doesn't place it in a new one.
    **/
-  unsortIcon(iconID) {
+  unsortIcon(iID) {
+
+    var iconID = parseInt(iID);
+
     if (this._findIconByID(iconID, this._sortedIcons) >= 0) {
 
       // First move the icon from the sorted to the unsorted list
@@ -186,7 +209,9 @@ var SortingTaskStore = Reflux.createStore({
 
       // remove the connection involving that icon
       var conIDInd = this._findIconByID(iconID, this._connections);
+      console.log('cID: ' + conIDInd);
       var binID = this._connections[conIDInd].binID;
+      console.log('bID: ' + binID);
       this._connections.splice(conIDInd, 1);
 
       // Remove that icon from it's bin record
@@ -196,8 +221,10 @@ var SortingTaskStore = Reflux.createStore({
       // demote the bin that icon was in if necessary.
       var fullBinIndex = this._findBinByID(binID, this._filledBins);
       var halfBinIndex = this._findBinByID(binID, this._halfFilledBins);
+      console.log('FBInd: ' + fullBinIndex);
+      console.log('HBInd: ' + halfBinIndex);
 
-      if ((fullBinIndex >= 0) && (this._filledBins.length < 3)) {
+      if ((fullBinIndex >= 0) && (this._binRecords[binID].length < 3)) {
         this._filledBins.splice(fullBinIndex, 1);
         this._halfFilledBins.push({binID: binID});
       } else if (halfBinIndex >= 0) {
@@ -209,6 +236,21 @@ var SortingTaskStore = Reflux.createStore({
     this._logStatus();
 
     return;
+  },
+
+  /**
+   * See If Task Is Complete looks at the list of filled and unfilled bins
+   *  in combination with the task ID and determines if the task is complete!
+   *   returns a boolean...
+   **/
+  seeIfTaskIsComplete: function() {
+
+    var allIconsSorted = (this._unsortedIcons.length == 0);
+    allIconsSorted = allIconsSorted && (this._sortedIcons.length == this._nIcons);
+    var allBinsFilled  = (this._unfilledBins.length == 0);
+    allBinsFilled = allBinsFilled && (this._filledBins.length == this._nBins);
+
+    return false;
   },
 
   /**
@@ -286,6 +328,10 @@ var SortingTaskStore = Reflux.createStore({
     console.log('');
     console.log('');
     console.log('');
+    console.log('unsorted icons: ');
+    console.log(this._unsortedIcons);
+    console.log('empty bins: ');
+    console.log(this._unfilledBins);
     console.log('sorted icons: ');
     console.log(this._sortedIcons);
     console.log('half filled bins: ');

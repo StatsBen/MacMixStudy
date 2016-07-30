@@ -87,8 +87,8 @@ var Icon = React.createClass({
     if (enclosingBin) {
       this._scootchIntoBin(e.target, enclosingBin);
       this._highlightBin(enclosingBin);
-      this._checkIfTaskCanBeSubmitted();
       SortingTaskStore.actions.sortIcon(this.props.iconID, enclosingBin.id);
+      this._checkIfTaskCanBeSubmitted();
     }
 
     else {
@@ -230,7 +230,10 @@ var Icon = React.createClass({
    *   and offers the user a notification that it's complete!
    **/
   _checkIfTaskCanBeSubmitted: function() {
-    // stub - no real checking. TODO
+    var taskComplete = SortingTaskStore.actions.seeIfTaskIsComplete();
+    if (taskComplete) {
+      // find a way to update the submit button!
+    }
     return;
   },
 
