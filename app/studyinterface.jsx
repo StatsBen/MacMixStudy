@@ -3,6 +3,7 @@ import React from 'react';
 var NavBar = require('./navbar.jsx');
 var SortingTask = require('./sortingtask.jsx');
 var SortingTaskStore = require('./stores/sortingTaskStore.js');
+var StudyInterfaceStore = require('./stores/studyInterfaceStore.js');
 
 /**
  * Outermost "container component" for the Macaron Mix User Study interface
@@ -10,12 +11,15 @@ var SortingTaskStore = require('./stores/sortingTaskStore.js');
  * Author: Ben Clark - July, 2016
  **/
 
+
 var StudyInterface = React.createClass({
 
   render: function() {
 
+    StudyInterfaceStore.actions.displayPopUpPrompt();
+
     //stub
-    var activeClass = 1;
+    var activeTask = 1;
 
     var task1Active = false;
     var task2Active = false;
@@ -24,7 +28,7 @@ var StudyInterface = React.createClass({
     var task5Active = false;
     var task6Active = false;
 
-    switch (activeClass) {
+    switch (activeTask) {
       case 1:
         task1Active = true;
         SortingTaskStore.actions.setNBins(11);
