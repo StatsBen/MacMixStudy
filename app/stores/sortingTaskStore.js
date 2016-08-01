@@ -252,6 +252,10 @@ var SortingTaskStore = Reflux.createStore({
 
     if (taskComplete) {
       // puke all the data out to the console!
+      var data = [this._unsortedIcons, this._sortedIcons, this._unfilledBins, this._halfFilledBins, this._filledBins, this._connections, this._binRecords];
+      var newBlob = new Blob(JSON.stringify(data), {type: 'text/JSON'});
+      var url = URL.createObjectURL(newBlob);
+
       alert('task complete! Please wait for your study facilitator to record this data and prepare the next task for you.');
     } else {
 
