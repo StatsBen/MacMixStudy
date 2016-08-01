@@ -11,11 +11,15 @@ import Reflux from 'reflux';
  **/
 
 var SortingTaskStore = require('./sortingTaskStore.js');
+var StudyInterface = require('./../studyinterface.jsx');
 
 var StudyInterfaceActions = Reflux.createActions(
 
   [
-    'displayPopUpPrompt'
+    'displayPopUpPrompt',
+    'getNBins',
+    'getAllBinsNeeded',
+    'getIsReady'
   ]
 
 );
@@ -27,7 +31,7 @@ var StudyInterfaceStore = Reflux.createStore({
   init: function() {
     this._nBins = 4;
     this._mustUseAllBins = true;
-    this._valuesSet = false;
+    this._isReady = false;
   },
 
   /**
@@ -164,6 +168,19 @@ var StudyInterfaceStore = Reflux.createStore({
     else {
       alert('an option remains unselected!');
     }
+  },
+
+
+  getNBins: function() {
+    return this._nBins;
+  },
+
+  getAllBinsNeeded: function() {
+    return this._mustUseAllBins;
+  },
+
+  getIsReady: function() {
+    return this._isReady;
   }
 
 });

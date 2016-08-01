@@ -14,12 +14,25 @@ var StudyInterfaceStore = require('./stores/studyInterfaceStore.js');
 
 var StudyInterface = React.createClass({
 
+  componentWillMount: function() {
+    StudyInterfaceStore.actions.displayPopUpPrompt();
+  },
+
+  getInitialState: function() {
+    return({nBins : 10});
+  },
+
+  testFunc: function(n) {
+    console.log('testytest...');
+//    this.setState({nBins: n});
+  },
+
   render: function() {
 
-    StudyInterfaceStore.actions.displayPopUpPrompt();
-
-    //stub
     var activeTask = 1;
+
+    var test = StudyInterfaceStore.actions.getNBins();
+    console.log(test);
 
     var task1Active = false;
     var task2Active = false;
