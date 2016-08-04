@@ -86,8 +86,8 @@ var StudyInterface = React.createClass({
             <select id="nBins-selector" name="number-of-bins">
               <option value="2">2</option>
               <option value="4">4</option>
-              <option value="7">7</option>
-              <option value="9">9</option>
+              <option value="8">8</option>
+              <option value="10">10</option>
               <option value="12">12</option>
             </select>
           </p>

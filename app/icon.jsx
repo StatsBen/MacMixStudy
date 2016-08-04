@@ -244,7 +244,6 @@ var Icon = React.createClass({
   _getAudioSourceFromID: function() {
     var id = (parseInt(this.props.iconID) + 1).toString();
     var previewURL = '/iconsDTW/icon' + id + '.wav';
-    console.log('ID: ' + id);
     return previewURL;
   },
 

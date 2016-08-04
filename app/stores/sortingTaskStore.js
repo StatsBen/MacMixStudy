@@ -354,9 +354,11 @@ var SortingTaskStore = Reflux.createStore({
     for (var i=0; i<this._nBins; i++) { //  i is the bin number
       var j = 0;                        //  j is the position in that bin record
       var icons = [];
-      while(this._binRecords[i][j]) {
-        icons.push(parseInt(this._binRecords[i][j].iconID));
-        j++;
+      if (this._binRecords[i]) {
+        while(this._binRecords[i][j]) {
+          icons.push(parseInt(this._binRecords[i][j].iconID));
+          j++;
+        }
       }
       for (var m=0; m<icons.length; m++) {
         for(var n=0; n<icons.length; n++) {
@@ -368,7 +370,7 @@ var SortingTaskStore = Reflux.createStore({
 
     //  Write the similarity matrix to csv format
     var output = "";
-    for (var i=0; i<this._nIcons; i++) {
+    for (var i=1; i<(this._nIcons+1); i++) {
       output += ("icon " + i.toString() + ","); }
     output += " \n";
 
