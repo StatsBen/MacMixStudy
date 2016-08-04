@@ -242,8 +242,9 @@ var Icon = React.createClass({
    *  icon based on the icon element's ID
    **/
   _getAudioSourceFromID: function() {
-    //stub
-    var previewURL = '/icons/wave' + this.props.iconID + '.wav';
+    var id = (parseInt(this.props.iconID) + 1).toString();
+    var previewURL = '/iconsDTW/icon' + id + '.wav';
+    console.log('ID: ' + id);
     return previewURL;
   },
 
@@ -262,17 +263,17 @@ var Icon = React.createClass({
     var shadowVal;
 
     var iconGlow = function() {
-      if (opacity < 0) { clearInterval(animID);
+      if (opacity < 0.9) { clearInterval(animID);
       currentIcon.style.boxShadow = "2px 2px 8px #444444"; }
       else {
         shadowVal = '0px 0px 25px rgba(265, 165, 0, '
         shadowVal += opacity.toString() + ')';
         currentIcon.style.boxShadow = shadowVal;
-        opacity = opacity - 0.01;
+        opacity = opacity - 0.001;
       }
     }
 
-    var animID = setInterval(iconGlow, 10);
+    var animID = setInterval(iconGlow, 30);
   },
 
 

@@ -17,7 +17,7 @@ var StudyInterface = React.createClass({
 
   getInitialState: function() {
     return({nBins : 4,
-            nIcons: 5,
+            nIcons: 21,
             needAllBins: true
           });
   },
