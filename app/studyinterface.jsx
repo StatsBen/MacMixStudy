@@ -17,7 +17,7 @@ var StudyInterface = React.createClass({
 
   getInitialState: function() {
     return({nBins : 4,
-            nIcons: 25,
+            nIcons: 5,
             needAllBins: true
           });
   },
@@ -29,17 +29,21 @@ var StudyInterface = React.createClass({
 
     console.log(allBins);
     console.log(newNBins);
+    console.log(allBins == "yes");
 
     if (newNBins && allBins) {
       //set up the task
+      SortingTaskStore.actions.clearData();
       StudyInterfaceStore.actions.setNBins(newNBins);
       StudyInterfaceStore.actions.setMustUseAllBins(allBins == "yes");
       StudyInterfaceStore.actions.setIsReady(true);
-
-      this.setState({nBins: newNBins, needAllBins: allBins});
-
       document.getElementById("settings-box").style.display = "none";
       document.getElementById("curtain").style.display = "none";
+      SortingTaskStore.actions.setNBins(newNBins);
+      SortingTaskStore.actions.setNIcons(this.state.nIcons);
+      SortingTaskStore.actions.setNeedAll(allBins == "yes");
+
+      this.setState({nBins: newNBins, needAllBins: allBins});
     }
 
     else {
@@ -67,7 +71,7 @@ var StudyInterface = React.createClass({
     var settingsBoxStyle = {
       position:  'absolute',
       width:     '400px',
-      height:    '300px',
+      height:    '200px',
       top:       '200px',
       left:      '300px',
       padding:   '15px',

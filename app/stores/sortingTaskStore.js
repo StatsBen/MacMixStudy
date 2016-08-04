@@ -16,13 +16,15 @@ var SortingTaskActions = Reflux.createActions(
   [
     'setNIcons',
     'setNBins',
+    'setNeedAll',
     'registerBin',
     'registerIcon',
     'sortIcon',
     'unsortIcon',
     'seeIfTaskIsComplete',
     'submitTask',
-    'saveTask'
+    'saveTask',
+    'clearData'
   ]
 
 );
@@ -36,7 +38,8 @@ var SortingTaskStore = Reflux.createStore({
   init: function() {
 
     this._nBins;
-    this._nIcons = 25;
+    this._nIcons;
+    this._needAllBins;
 
     // Here's the list of all icons and bins.
     this._icons = [];
@@ -65,6 +68,12 @@ var SortingTaskStore = Reflux.createStore({
   /** Set nBins just sets the value of nBins.   **/
   setNBins: function(nBins) {
     this._nBins = nBins;
+  },
+
+  /** Set Need All sets whether or not every bin needs to be used for a task
+   *   to be complete.  **/
+  setNeedAll: function(n) {
+    this._needAllBins = n;
   },
 
   /**
@@ -252,11 +261,39 @@ var SortingTaskStore = Reflux.createStore({
 
     if (taskComplete) {
       // puke all the data out to the console!
-      var data = [this._unsortedIcons, this._sortedIcons, this._unfilledBins, this._halfFilledBins, this._filledBins, this._connections, this._binRecords];
-      var newBlob = new Blob(JSON.stringify(data), {type: 'text/JSON'});
-      var url = URL.createObjectURL(newBlob);
+      var data = new Array();
+      data.push('Unsorted Icons:  \n\n');
+      data.push(this._unsortedIcons);
+      data.push('Sorted Icons:  \n\n');
+      data.push(this._sortedIcons);
+      data.push('Unfilled Bins:  \n\n');
+      data.push(this._unfilledBins);
+      data.push('Half Filled Bins:  \n\n');
+      data.push(this._halfFilledBins);
+      data.push('Filled Bins:  \n\n');
+      data.push(this._filledBins);
+      data.push('Connections:  \n\n');
+      data.push(this._connections);
+      data.push('Bin Records:  \n\n');
+      data.push(this._binRecords);
+      console.log(data);
+      var newBlob = new Blob([JSON.stringify(data,null,2)],{type: 'text/JSON'});
+      newBlob.name = 'results-' + this._nBins.toString() + '-';
+      newBlob.name += this._needAllBins.toString() + '.txt';
+      var dataURL = URL.createObjectURL(newBlob);
 
-      alert('task complete! Please wait for your study facilitator to record this data and prepare the next task for you.');
+      /** Display the link!  **/
+      document.getElementById("curtain").style.display = "inline";
+      var box = document.getElementById("settings-box");
+      var dataLink = document.createElement("a");
+  		dataLink.setAttribute("value", "Download");
+  		dataLink.setAttribute("href", dataURL);
+  		dataLink.setAttribute("download", newBlob.name);
+      dataLink.innerHTML = "Results";
+      box.style.display = "inline";
+      box.innerHTML = "";
+      box.appendChild(dataLink);
+
     } else {
 
       // Icons remain unsorted
@@ -294,8 +331,24 @@ var SortingTaskStore = Reflux.createStore({
     allIconsSorted = allIconsSorted && (this._sortedIcons.length == this._nIcons);
     var allBinsFilled  = (this._unfilledBins.length == 0);
     allBinsFilled = allBinsFilled && (this._filledBins.length == this._nBins);
+    console.log('need all bins?  ' + this._needAllBins);
+    console.log('all icons sorted?  ' + allIconsSorted);
+    console.log('this._unsortedIcons.length:  ' + this._unsortedIcons.length);
+    console.log('this._Icons:  ' + this._nIcons);
 
-    return(allIconsSorted && allBinsFilled);
+    if (this._needAllBins) {
+      return(allIconsSorted && allBinsFilled);
+    } else {
+      return(allIconsSorted);
+    }
+  },
+
+  /**
+   * Clear Data empties all the data
+   **/
+  clearData: function() {
+    this._data = [];
+    this.init();
   },
 
 
