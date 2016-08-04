@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 var NavBar = require('./navbar.jsx');
 var SortingTask = require('./sortingtask.jsx');
@@ -14,75 +15,98 @@ var StudyInterfaceStore = require('./stores/studyInterfaceStore.js');
 
 var StudyInterface = React.createClass({
 
-  componentWillMount: function() {
-    StudyInterfaceStore.actions.displayPopUpPrompt();
-  },
-
   getInitialState: function() {
-    return({nBins : 10});
+    return({nBins : 4,
+            nIcons: 25,
+            needAllBins: true
+          });
   },
 
-  testFunc: function(n) {
-    console.log('testytest...');
-//    this.setState({nBins: n});
+
+  _beginTask:function() {
+    var newNBins = parseInt(document.getElementById("nBins-selector").value);
+    var allBins = document.getElementById("bin-options-selector").value;
+
+    console.log(allBins);
+    console.log(newNBins);
+
+    if (newNBins && allBins) {
+      //set up the task
+      StudyInterfaceStore.actions.setNBins(newNBins);
+      StudyInterfaceStore.actions.setMustUseAllBins(allBins == "yes");
+      StudyInterfaceStore.actions.setIsReady(true);
+
+      this.setState({nBins: newNBins, needAllBins: allBins});
+
+      document.getElementById("settings-box").style.display = "none";
+      document.getElementById("curtain").style.display = "none";
+    }
+
+    else {
+      alert('an option remains unselected!');
+    }
+
   },
+
+
+
+
 
   render: function() {
 
-    var activeTask = 1;
+    var curtainStyle = {
+      position:  'absolute',
+      width:     '100%',
+      height:    '100%',
+      top:       '0',
+      left:      '0',
+      background:'rgba(0,0,0,0.7)',
+      zIndex:    '999'
+    };
 
-    var test = StudyInterfaceStore.actions.getNBins();
-    console.log(test);
-
-    var task1Active = false;
-    var task2Active = false;
-    var task3Active = false;
-    var task4Active = false;
-    var task5Active = false;
-    var task6Active = false;
-
-    switch (activeTask) {
-      case 1:
-        task1Active = true;
-        SortingTaskStore.actions.setNBins(11);
-        break;
-      case 2:
-        task2Active = true;
-        SortingTaskStore.actions.setNBins(2);
-        break;
-      case 3:
-        task3Active = true;
-        SortingTaskStore.actions.setNBins(4);
-        break;
-      case 4:
-        task4Active = true;
-        SortingTaskStore.actions.setNBins(7);
-        break;
-      case 5:
-        task5Active = true;
-        SortingTaskStore.actions.setNBins(9);
-        break;
-      case 6:
-        task6Active = true;
-        SortingTaskStore.actions.setNBins(12);
-        break;
-      default:
-        task1Active = true;
-        SortingTaskStore.actions.setNBins(7);
-    }
+    var settingsBoxStyle = {
+      position:  'absolute',
+      width:     '400px',
+      height:    '300px',
+      top:       '200px',
+      left:      '300px',
+      padding:   '15px',
+      background:'#FFFFFF',
+      borderRadius:'10px',
+      boxShadow: '2px 2px 10px #000000',
+      zIndex:    '1000'
+    };
 
     return(
       <div id="app">
+        <div id="curtain" style={curtainStyle}></div>
+        <div id="settings-box" style={settingsBoxStyle}>
+          <p>Welcome to the Macaron Mix User Study. Your study facilitator will now set up your sorting task.</p>
+          <p id="bin-number-selector-text">How many bins should be in this task?
+            <select id="nBins-selector" name="number-of-bins">
+              <option value="2">2</option>
+              <option value="4">4</option>
+              <option value="7">7</option>
+              <option value="9">9</option>
+              <option value="12">12</option>
+            </select>
+          </p>
+          <p id="all-bins-text">Do all the bins need to be used?
+            <select id="bin-options-selector" name="bin-options-selector">
+              <option value="yes">yes</option>
+              <option value="no">no</option>
+            </select>
+          </p>
+          <button type="button" onClick={this._beginTask}>Start</button>
+        </div>
         <NavBar />
-        <SortingTask taskID={1} isActive={task1Active} nBins={11} />
-        <SortingTask taskID={2} isActive={task2Active} nBins={2} />
-        <SortingTask taskID={3} isActive={task3Active} nBins={4} />
-        <SortingTask taskID={4} isActive={task4Active} nBins={7} />
-        <SortingTask taskID={5} isActive={task5Active} nBins={9} />
-        <SortingTask taskID={6} isActive={task6Active} nBins={12} />
+        <SortingTask taskID={1}
+                     isActive={true}
+                     nBins={this.state.nBins}
+                     nIcons={this.state.nIcons}/>
       </div>
     );
-  }
+  },
 
 });
 

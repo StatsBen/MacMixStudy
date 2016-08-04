@@ -243,7 +243,7 @@ var Icon = React.createClass({
    **/
   _getAudioSourceFromID: function() {
     //stub
-    var previewURL = '/icons/wave' + this.props.iconID + '.wav';
+    var previewURL = '/icons/icon' + this.props.iconID + '.wav';
     return previewURL;
   },
 
