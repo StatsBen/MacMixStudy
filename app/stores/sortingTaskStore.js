@@ -158,7 +158,6 @@ var SortingTaskStore = Reflux.createStore({
       // demote the previous bin if need be...
       var fullBinIndex = this._findBinByID(prevBinID, this._filledBins);
       var halfBinIndex = this._findBinByID(prevBinID, this._halfFilledBins);
-      console.log(prevBinID);
 
       if ((fullBinIndex >= 0) && (this._binRecords[prevBinID].length < 2)) {
         this._filledBins.splice(fullBinIndex, 1);
@@ -221,9 +220,7 @@ var SortingTaskStore = Reflux.createStore({
 
       // remove the connection involving that icon
       var conIDInd = this._findIconByID(iconID, this._connections);
-      console.log('cID: ' + conIDInd);
       var binID = this._connections[conIDInd].binID;
-      console.log('bID: ' + binID);
       this._connections.splice(conIDInd, 1);
 
       // Remove that icon from it's bin record
@@ -233,8 +230,6 @@ var SortingTaskStore = Reflux.createStore({
       // demote the bin that icon was in if necessary.
       var fullBinIndex = this._findBinByID(binID, this._filledBins);
       var halfBinIndex = this._findBinByID(binID, this._halfFilledBins);
-      console.log('FBInd: ' + fullBinIndex);
-      console.log('HBInd: ' + halfBinIndex);
 
       if ((fullBinIndex >= 0) && (this._binRecords[binID].length < 2)) {
         this._filledBins.splice(fullBinIndex, 1);
@@ -260,23 +255,28 @@ var SortingTaskStore = Reflux.createStore({
     var taskComplete = this._seeIfTaskIsComplete();
 
     if (taskComplete) {
+
+      // Make the dissimilarity matrix
+      var dissimilarityMatrix = this._computeSimilarityMatrix();
+
       // puke all the data out to the console!
       var data = new Array();
-      data.push('Unsorted Icons:  \n\n');
+      data.push('Unsorted Icons:  ');
       data.push(this._unsortedIcons);
-      data.push('Sorted Icons:  \n\n');
+      data.push('Sorted Icons:  ');
       data.push(this._sortedIcons);
-      data.push('Unfilled Bins:  \n\n');
+      data.push('Unfilled Bins:  ');
       data.push(this._unfilledBins);
-      data.push('Half Filled Bins:  \n\n');
+      data.push('Half Filled Bins:  ');
       data.push(this._halfFilledBins);
-      data.push('Filled Bins:  \n\n');
+      data.push('Filled Bins:  ');
       data.push(this._filledBins);
-      data.push('Connections:  \n\n');
+      data.push('Connections:  ');
       data.push(this._connections);
-      data.push('Bin Records:  \n\n');
+      data.push('Bin Records:  ');
       data.push(this._binRecords);
-      console.log(data);
+      data.push('Similarity Matrix:  ');
+      data.push(dissimilarityMatrix);
       var newBlob = new Blob([JSON.stringify(data,null,2)],{type: 'text/JSON'});
       newBlob.name = 'results-' + this._nBins.toString() + '-';
       newBlob.name += this._needAllBins.toString() + '.txt';
@@ -331,16 +331,61 @@ var SortingTaskStore = Reflux.createStore({
     allIconsSorted = allIconsSorted && (this._sortedIcons.length == this._nIcons);
     var allBinsFilled  = (this._unfilledBins.length == 0);
     allBinsFilled = allBinsFilled && (this._filledBins.length == this._nBins);
-    console.log('need all bins?  ' + this._needAllBins);
-    console.log('all icons sorted?  ' + allIconsSorted);
-    console.log('this._unsortedIcons.length:  ' + this._unsortedIcons.length);
-    console.log('this._Icons:  ' + this._nIcons);
 
     if (this._needAllBins) {
       return(allIconsSorted && allBinsFilled);
     } else {
       return(allIconsSorted);
     }
+  },
+
+  /**
+   * Compute Similarity Matrix creates the dissimilarity matrix for the
+   *  individual task at hand.
+   **/
+  _computeSimilarityMatrix: function() {
+
+    var n2 = this._nIcons * this._nIcons;   // n squared
+
+    var similarityMatrix = new Array(n2);
+    for (var i=0; i<n2; i++) {similarityMatrix[i] = 0;}
+
+    // make the similarity matrix
+    for (var i=0; i<this._nBins; i++) { //  i is the bin number
+      var j = 0;                        //  j is the position in that bin record
+      var icons = [];
+      while(this._binRecords[i][j]) {
+        icons.push(parseInt(this._binRecords[i][j].iconID));
+        j++;
+      }
+      for (var m=0; m<icons.length; m++) {
+        for(var n=0; n<icons.length; n++) {
+          var ind = this._index(icons[m],icons[n]);
+          similarityMatrix[ind] = this._nBins;
+        }
+      }
+    }
+
+    //  Write the similarity matrix to csv format
+    var output = "";
+    for (var i=0; i<this._nIcons; i++) {
+      output += ("icon " + i.toString() + ","); }
+    output += " \n";
+
+    for (var i=0; i<this._nIcons; i++) {    //  i is the row
+      for (var j=0; j<this._nIcons; j++) {  //  j is the column
+        var ind = this._index(i,j)
+        if (j == (this._nIcons-1)) {
+          output += (similarityMatrix[ind].toString() + ',\n');
+        } else {
+          output += (similarityMatrix[ind].toString() + ',');
+        }
+      }
+    }
+
+    console.log(output);
+
+    return output;  //stub
   },
 
   /**
@@ -352,9 +397,12 @@ var SortingTaskStore = Reflux.createStore({
   },
 
 
-
-
   /**  Some useful internal functions...   **/
+
+  _index: function(i, j) {
+    return((this._nIcons * i) + j);
+  },
+
 
   _findBinByID: function(binID, list) {
 

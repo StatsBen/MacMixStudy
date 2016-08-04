@@ -27,10 +27,6 @@ var StudyInterface = React.createClass({
     var newNBins = parseInt(document.getElementById("nBins-selector").value);
     var allBins = document.getElementById("bin-options-selector").value;
 
-    console.log(allBins);
-    console.log(newNBins);
-    console.log(allBins == "yes");
-
     if (newNBins && allBins) {
       //set up the task
       SortingTaskStore.actions.clearData();
