@@ -243,9 +243,40 @@ var Icon = React.createClass({
    **/
   _getAudioSourceFromID: function() {
     //stub
-    var previewURL = '/icons/icon' + this.props.iconID + '.wav';
+    var previewURL = '/icons/wave' + this.props.iconID + '.wav';
     return previewURL;
   },
+
+  /**
+   * Handle Double Click highlights an icon to confirm that it's been double
+   *  clicked for previewing, and plays the audio inside.
+   **/
+  _handleDoubleClick: function() {
+
+    var iconID = this.props.iconID.toString() + '-icon';
+    var currentIcon = document.getElementById(iconID);
+    var audioID = 'audio-' + iconID;
+    document.getElementById(audioID).play();
+
+    var opacity = 1;
+    var shadowVal;
+
+    var iconGlow = function() {
+      if (opacity < 0) { clearInterval(animID);
+      currentIcon.style.boxShadow = "2px 2px 8px #444444"; }
+      else {
+        shadowVal = '0px 0px 25px rgba(265, 165, 0, '
+        shadowVal += opacity.toString() + ')';
+        currentIcon.style.boxShadow = shadowVal;
+        opacity = opacity - 0.01;
+      }
+    }
+
+    var animID = setInterval(iconGlow, 10);
+  },
+
+
+
 
 
   render: function() {
@@ -276,17 +307,13 @@ var Icon = React.createClass({
 
     SortingTaskStore.actions.registerIcon(iconID);
 
-    var playPreview = function() {
-      document.getElementById(audioID).play();
-    };
-
 
     return(
       <div id={iconID}
            style={iconStyle}
            onMouseDown={this._startDrag}
            onMouseUp={this._endDrag}
-           onDoubleClick={playPreview} >
+           onDoubleClick={this._handleDoubleClick} >
         <audio id={audioID}>
           <source src={audioSource} type="audio/wav" />
         </audio>
