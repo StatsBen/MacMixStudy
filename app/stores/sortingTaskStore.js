@@ -330,7 +330,7 @@ var SortingTaskStore = Reflux.createStore({
     var allIconsSorted = (this._unsortedIcons.length == 0);
     allIconsSorted = allIconsSorted && (this._sortedIcons.length == this._nIcons);
     var allBinsFilled  = (this._unfilledBins.length == 0);
-    allBinsFilled = allBinsFilled && (this._filledBins.length == this._nBins);
+    allBinsFilled = allBinsFilled && ((this._filledBins.length + this._halfFilledBins.length) == this._nBins);
 
     if (this._needAllBins) {
       return(allIconsSorted && allBinsFilled);
@@ -378,7 +378,7 @@ var SortingTaskStore = Reflux.createStore({
       for (var j=0; j<this._nIcons; j++) {  //  j is the column
         var ind = this._index(i,j)
         if (j == (this._nIcons-1)) {
-          output += (similarityMatrix[ind].toString() + ',\n');
+          output += (similarityMatrix[ind].toString() + ',\n ');
         } else {
           output += (similarityMatrix[ind].toString() + ',');
         }

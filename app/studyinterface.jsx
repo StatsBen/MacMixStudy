@@ -85,10 +85,10 @@ var StudyInterface = React.createClass({
           <p id="bin-number-selector-text">How many bins should be in this task?
             <select id="nBins-selector" name="number-of-bins">
               <option value="2">2</option>
+              <option value="3">3</option>
               <option value="4">4</option>
-              <option value="8">8</option>
-              <option value="10">10</option>
-              <option value="12">12</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
             </select>
           </p>
           <p id="all-bins-text">Do all the bins need to be used?
