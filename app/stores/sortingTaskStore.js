@@ -469,6 +469,39 @@ var SortingTaskStore = Reflux.createStore({
     console.log(this._connections);
     console.log('Bin Records: ');
     console.log(this._binRecords);
+  },
+
+  /**
+   *  Name Unscrambler converts the represented iconID to the actual icon
+   *   number via the key called 'naming_scheme.txt' in the icons folder.
+   *      Note: Key was generated using random.org
+   **/
+  _nameUnscrambler: function(id) {
+    var actualID;
+    switch (id) {
+      case 1:  actualID = 11; break;
+      case 2:  actualID = 12; break;
+      case 3:  actualID = 7;  break;
+      case 4:  actualID = 9;  break;
+      case 5:  actualID = 17; break;
+      case 6:  actualID = 2;  break;
+      case 7:  actualID = 3;  break;
+      case 8:  actualID = 8;  break;
+      case 9:  actualID = 4;  break;
+      case 10: actualID = 1;  break;
+      case 11: actualID = 18; break;
+      case 12: actualID = 20; break;
+      case 13: actualID = 5;  break;
+      case 14: actualID = 14; break;
+      case 15: actualID = 6;  break;
+      case 16: actualID = 15; break;
+      case 17: actualID = 16; break;
+      case 18: actualID = 21; break;
+      case 19: actualID = 13; break;
+      case 20: actualID = 19; break;
+      case 21: actualID = 10; break;
+    }
+    return actualID;
   }
 
 });
